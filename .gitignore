@@ -14,6 +14,7 @@ env/
 *.sqlite3
 *.sqlite3-journal
 *.log
+staticfiles/
 
 # IDE & OS
 .DS_Store
