@@ -140,7 +140,7 @@ The top navigation bar and trip form contain **1-Click Pre-set Scenarios**:
 ## 🌿 Git Branch Hierarchy & Workflow
 
 This repository follows enterprise GitFlow branching standards:
-- **`master` / `production`**: Production-ready release branch.
+- **`master`**: Main production release branch.
 - **`staging`**: Staging integration & QA branch.
 - **`develop`**: Active development integration branch.
 - **`feature/backend-hos-routing-api`**: Backend HOS engine, OSRM routing, and DRF views.
