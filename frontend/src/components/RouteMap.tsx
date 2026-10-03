@@ -93,8 +93,13 @@ export const RouteMap = ({
 
       L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-      // CartoDB Voyager tile layer
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      // CartoDB Voyager tile layer with API key
+      const cartoApiKey = import.meta.env.VITE_CARTO_API_KEY || 'cb1_48kh_1_619cf25aba877e5667918fcd';
+      const tileUrl = cartoApiKey
+        ? `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?api_key=${cartoApiKey}`
+        : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+
+      L.tileLayer(tileUrl, {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
         maxZoom: 19,
