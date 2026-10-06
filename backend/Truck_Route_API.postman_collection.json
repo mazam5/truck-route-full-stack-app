@@ -1,8 +1,8 @@
 {
   "info": {
     "_postman_id": "8f3b2c9a-41d6-47b8-a720-39e8f1b62a44",
-    "name": "Spotter AI - Truck Route & HOS ELD Engine API",
-    "description": "Comprehensive Postman API collection for Spotter AI Truck Route Planning, FMCSA Hours of Service (HOS 70hr/8day) Engine, and 24-Hour Driver's Daily Log (Form MCS-59) APIs.",
+    "name": "Truck Route & HOS ELD Engine API",
+    "description": "Comprehensive Postman API collection for Truck Route Planning, FMCSA Hours of Service (HOS 70hr/8day) Engine, and 24-Hour Driver's Daily Log (Form MCS-59) APIs.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
