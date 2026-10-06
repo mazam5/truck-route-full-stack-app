@@ -1,7 +1,6 @@
-import math
 import logging
-from datetime import datetime, timedelta, date
-from typing import List, Dict, Any, Optional
+from datetime import datetime, timedelta
+from typing import List, Dict, Any
 from .hos_service import (
     STATUS_OFF_DUTY,
     STATUS_SLEEPER_BERTH,

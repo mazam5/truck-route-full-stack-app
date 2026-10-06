@@ -1,0 +1,368 @@
+{
+  "info": {
+    "_postman_id": "8f3b2c9a-41d6-47b8-a720-39e8f1b62a44",
+    "name": "Spotter AI - Truck Route & HOS ELD Engine API",
+    "description": "Comprehensive Postman API collection for Spotter AI Truck Route Planning, FMCSA Hours of Service (HOS 70hr/8day) Engine, and 24-Hour Driver's Daily Log (Form MCS-59) APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/health/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "health",
+            ""
+          ]
+        },
+        "description": "System health and readiness check."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Service is healthy\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.eql(\"healthy\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Places Autocomplete",
+      "item": [
+        {
+          "name": "Search Places - Chicago",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/places/search/?q=Chicago",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "places",
+                "search",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Chicago"
+                }
+              ]
+            },
+            "description": "Autocomplete city search for Chicago."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Returns array of matched cities\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(Array.isArray(jsonData)).to.be.true;",
+                  "    pm.expect(jsonData.length).to.be.greaterThan(0);",
+                  "    pm.expect(jsonData[0]).to.have.property(\"lat\");",
+                  "    pm.expect(jsonData[0]).to.have.property(\"lng\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search Places - Dallas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/places/search/?q=Dallas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "places",
+                "search",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Dallas"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Route & HOS Planning",
+      "item": [
+        {
+          "name": "1. Standard Interstate Haul (Chicago -> Dallas)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_location\": \"Chicago, IL\",\n  \"pickup_location\": \"Indianapolis, IN\",\n  \"dropoff_location\": \"Dallas, TX\",\n  \"current_cycle_used_hours\": 20.0,\n  \"carrier_name\": \"Spotter Logistics Inc.\",\n  \"driver_name\": \"John E. Doe\",\n  \"truck_number\": \"TRK-8841\",\n  \"trailer_number\": \"TLR-9022\",\n  \"commodity\": \"General Freight / Palletized Goods\",\n  \"shipping_doc_number\": \"BOL-101601\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/route-plan/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "route-plan",
+                ""
+              ]
+            },
+            "description": "Calculates standard ~1,100 mile route from Chicago to Dallas with 1 hr pickup, 1 fuel stop (1,000-mile rule), 30-min break, 10h sleeper berth, and 24h daily log sheets."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var data = pm.response.json();",
+                  "pm.test(\"Response status is success\", function () {",
+                  "    pm.expect(data.status).to.eql(\"success\");",
+                  "});",
+                  "pm.test(\"Contains route geometry polyline\", function () {",
+                  "    pm.expect(data.route_geometry.coordinates.length).to.be.greaterThan(5);",
+                  "});",
+                  "pm.test(\"Contains stops and scheduled waypoints\", function () {",
+                  "    pm.expect(data.stops.length).to.be.greaterThan(3);",
+                  "});",
+                  "pm.test(\"Each daily log sheet totals exactly 24.0 hours\", function () {",
+                  "    pm.expect(data.daily_logs.length).to.be.greaterThan(0);",
+                  "    data.daily_logs.forEach(function(sheet) {",
+                  "        var summary = sheet.hours_summary;",
+                  "        var total = summary.off_duty + summary.sleeper_berth + summary.driving + summary.on_duty_not_driving;",
+                  "        pm.expect(Math.round(total * 100) / 100).to.eql(24.00);",
+                  "    });",
+                  "});",
+                  "pm.test(\"Recap table is populated\", function () {",
+                  "    pm.expect(data.daily_logs[0].recap).to.have.property(\"total_hours_last_7_days_including_today\");",
+                  "    pm.expect(data.daily_logs[0].recap).to.have.property(\"total_hours_available_tomorrow\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. Coast-to-Coast Multi-Day (LA -> Miami)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_location\": \"Los Angeles, CA\",\n  \"pickup_location\": \"Phoenix, AZ\",\n  \"dropoff_location\": \"Miami, FL\",\n  \"current_cycle_used_hours\": 15.0,\n  \"carrier_name\": \"Spotter Express Hauling\",\n  \"driver_name\": \"Alex Rivera\",\n  \"truck_number\": \"TRK-5502\",\n  \"trailer_number\": \"TLR-7714\",\n  \"commodity\": \"Refrigerated Electronics & Produce\",\n  \"shipping_doc_number\": \"BOL-994320\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/route-plan/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "route-plan",
+                ""
+              ]
+            },
+            "description": "Calculates long-haul 2,700+ mile cross-country trip generating multi-day FMCSA daily logs (Day 1 through Day 5) with multiple 10h sleeper rests and fuel stops."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var data = pm.response.json();",
+                  "pm.test(\"Multi-day trip generates multiple 24h log sheets\", function () {",
+                  "    pm.expect(data.daily_logs.length).to.be.greaterThanOrEqual(4);",
+                  "});",
+                  "pm.test(\"Includes multiple sleeper berth stops and fuel stops\", function () {",
+                  "    pm.expect(data.summary.sleeper_rests_count).to.be.greaterThanOrEqual(3);",
+                  "    pm.expect(data.summary.fuel_stops_count).to.be.greaterThanOrEqual(2);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. Official FMCSA PDF Sample (Richmond -> Newark)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_location\": \"Richmond, VA\",\n  \"pickup_location\": \"Richmond, VA\",\n  \"dropoff_location\": \"Newark, NJ\",\n  \"current_cycle_used_hours\": 10.0,\n  \"carrier_name\": \"John Doe's Transportation\",\n  \"driver_name\": \"John E. Doe\",\n  \"truck_number\": \"123\",\n  \"trailer_number\": \"20544\",\n  \"commodity\": \"Commercial Goods\",\n  \"shipping_doc_number\": \"101601\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/route-plan/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "route-plan",
+                ""
+              ]
+            },
+            "description": "Replicates the official John Doe example from pages 18 & 19 of the FMCSA DOT Handbook."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var data = pm.response.json();",
+                  "pm.test(\"Short haul finishes in 1 calendar day\", function () {",
+                  "    pm.expect(data.daily_logs.length).to.be.lessThanOrEqual(2);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. Validation Error - Missing Required Field",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_location\": \"Chicago, IL\",\n  \"dropoff_location\": \"Dallas, TX\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/route-plan/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "route-plan",
+                ""
+              ]
+            },
+            "description": "Tests DRF validation when 'pickup_location' is omitted."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "var data = pm.response.json();",
+                  "pm.test(\"Returns validation error details\", function () {",
+                  "    pm.expect(data.error).to.eql(\"Validation Error\");",
+                  "    pm.expect(data.details).to.have.property(\"pickup_location\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

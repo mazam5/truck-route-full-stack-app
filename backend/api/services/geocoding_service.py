@@ -1,7 +1,7 @@
 import math
 import logging
 import requests
-from typing import Optional, Tuple, Dict, Any, List
+from typing import Dict, Any, List
 
 logger = logging.getLogger(__name__)
 
