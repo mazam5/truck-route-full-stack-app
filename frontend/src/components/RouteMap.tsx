@@ -94,7 +94,7 @@ export const RouteMap = ({
       L.control.zoom({ position: 'bottomright' }).addTo(map);
 
       // CartoDB Voyager tile layer with CARTO 'key' parameter
-      const cartoApiKey = import.meta.env.VITE_CARTO_API_KEY || 'cb1_48kh_1_619cf25aba877e5667918fcd';
+      const cartoApiKey = import.meta.env.VITE_CARTO_API_KEY;
       const tileUrl = cartoApiKey
         ? `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=${cartoApiKey}`
         : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
