@@ -14,8 +14,7 @@
 | Deliverable | Status | Link / Reference |
 | :--- | :---: | :--- |
 | 🌐 **Live Hosted Web Application** | 🟢 Ready | [https://truck-route-azam.netlify.app](https://truck-route-azam.netlify.app) |
-| 🎥 **3–5 Min Loom Video Walkthrough** | 🟢 Ready | [Watch the Architecture & Code Walkthrough on Loom](https://www.loom.com) *(Demo placeholder link)* |
-| 📂 **GitHub Source Code Repository** | 🟢 Ready | [GitHub Repository — GitFlow Hierarchy](https://github.com/mazam5/truck-route-full-stack-app-azam/) |
+| 📂 **GitHub Source Code Repository** | 🟢 Ready | [GitHub Repository — GitFlow Hierarchy](https://github.com/mazam5/truck-route-full-stack-app/) |
 | 🧪 **Postman Automated API Collection** | 🟢 Ready | [`Truck_Route_API.postman_collection.json`](./backend/Truck_Route_API.postman_collection.json) |
 | 📜 **FMCSA Form MCS-59 Log Sheets** | 🟢 Ready | Interactive Vector SVG Grid + 24.0h Balance + 70h/8d Recap |
 
@@ -32,7 +31,7 @@ This application is a **high-precision, algorithmic dispatch and Hours of Servic
 - **Current Location (Origin)**: Starting coordinates of the tractor-trailer.
 - **Pickup Location (Shipper)**: Commercial shipper facility (automatically schedules **1.0 hr On-Duty Loading**).
 - **Dropoff Location (Consignee)**: Destination facility (automatically schedules **1.0 hr On-Duty Unloading**).
-- **Current Cycle Used (Hrs)**: Initial 70-hour / 8-day rolling cycle hours already expended by the driver ($0.0 \text{ to } 70.0\text{ hrs}$).
+- **Current Cycle Used (Hrs)**: Initial 70-hour / 8-day rolling cycle hours already expended by the driver (`0.0` to `70.0` hrs).
 
 ### Core Output Capabilities
 
@@ -41,8 +40,8 @@ This application is a **high-precision, algorithmic dispatch and Hours of Servic
    - Categorized SVG map pins:
      - 🟢 **Origin** (Trip start)
      - 🔵 **Shipper / Pickup** (1.0 hr On-Duty Loading)
-     - 🟡 **Fueling Stops** (Mandatory every $\le$ 1,000 miles, 30 min On-Duty)
-     - 🟣 **Mandatory 30-Min Rest Breaks** (Required after $\le$ 8 hours of cumulative driving)
+     - 🟡 **Fueling Stops** (Mandatory every ≤ 1,000 miles, 30 min On-Duty)
+     - 🟣 **Mandatory 30-Min Rest Breaks** (Required after ≤ 8 hours of cumulative driving)
      - 🟣 **10-Hour Sleeper Berth Layover** (Full shift clock reset)
      - 🔴 **Consignee / Dropoff** (1.0 hr On-Duty Unloading)
 2. **Authentic FMCSA Form MCS-59 Daily Log Sheets**:
@@ -53,9 +52,9 @@ This application is a **high-precision, algorithmic dispatch and Hours of Servic
      4. `On Duty (Not Driving)`
    - Precise vertical transition segments between duty states.
    - Time-tick mapped location remarks (e.g., `"Flagstaff, AZ - 10h Sleeper Rest"`).
-   - Strict arithmetic validation: $\text{Line 1} + \text{Line 2} + \text{Line 3} + \text{Line 4} \equiv \mathbf{24.00\text{ \textbf{Hours}}}$ on every single calendar day sheet.
+   - Strict arithmetic validation: `Line 1 (Off Duty) + Line 2 (Sleeper) + Line 3 (Driving) + Line 4 (On Duty) == 24.00 Hours` on every single calendar day sheet.
    - **70-Hour / 8-Day Driver Recap Table** displaying rolling hours available.
-   - Multi-day trip handling with dynamic day tab switcher (Day 1 through Day $N$).
+   - Multi-day trip handling with dynamic day tab switcher (Day 1 through Day N).
    - Pixel-perfect **PDF & Print Export** styling.
 
 ---
@@ -66,10 +65,10 @@ This application is a **high-precision, algorithmic dispatch and Hours of Servic
 | :--- | :--- | :--- |
 | **11-Hour Driving Limit** | [49 CFR § 395.3(a)(3)](https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-395/section-395.3) | A driver may drive a maximum of **11.0 cumulative hours** after 10 consecutive hours off duty / sleeper berth. |
 | **14-Hour Duty Window** | [49 CFR § 395.3(a)(2)](https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-395/section-395.3) | A driver cannot drive beyond the **14th consecutive hour** after coming on duty following a 10-hour rest period. |
-| **30-Minute Rest Break** | [49 CFR § 395.3(a)(3)(ii)](https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-395/section-395.3) | Driving is not permitted if more than **8.0 cumulative hours** have passed without a qualifying $\ge 30$-minute rest break. |
+| **30-Minute Rest Break** | [49 CFR § 395.3(a)(3)](https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-395/section-395.3) | Driving is not permitted if more than **8.0 cumulative hours** have passed without a qualifying ≥ 30-minute rest break. |
 | **10-Hour Sleeper Berth** | [49 CFR § 395.1(g)](https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-395/section-395.1) | A mandatory **10.0 consecutive hour rest** in the sleeper berth resets the 11-hour driving limit and 14-hour duty window. |
 | **70-Hour / 8-Day Cycle** | [49 CFR § 395.3(b)](https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-395/section-395.3) | Total on-duty + driving time cannot exceed **70.0 hours in any 8 consecutive days**. Triggers a **34-Hour Restart** if cycle is exhausted. |
-| **Mandatory Fueling** | Assessment Specification | Commercial diesel fueling stops ($30\text{ min On-Duty}$) are automatically scheduled at intervals $\le \mathbf{1,000\text{ \textbf{Miles}}}$. |
+| **Mandatory Fueling** | Assessment Specification | Commercial diesel fueling stops (**30 min On-Duty**) are automatically scheduled at intervals **≤ 1,000 Miles**. |
 | **Terminal Operations** | Assessment Specification | **1.0 hour On-Duty** scheduled for Shipper loading and **1.0 hour On-Duty** scheduled for Consignee unloading. |
 
 ---
@@ -160,33 +159,36 @@ truck-route-full-stack-app/
 ### 1. Continuous Event Stream Generation
 
 The HOS Engine ([`hos_service.py`](./backend/api/services/hos_service.py)) models the driver's journey as a sequence of discrete chronological events:
-$$\text{Event} = \langle \text{Status}, \text{Start Time}, \text{End Time}, \text{Duration}, \text{Start Mile}, \text{End Mile}, \text{Location Remark} \rangle$$
+
+> `Event = ⟨ Status, Start Time, End Time, Duration, Start Mile, End Mile, Location Remark ⟩`
 
 The driver operates against four dynamic regulatory clocks:
 
-- $C_{\text{drive}} \le 11.0\text{ hrs}$ (Driving Clock)
-- $C_{\text{window}} \le 14.0\text{ hrs}$ (Duty Window Clock)
-- $C_{\text{break}} \le 8.0\text{ hrs}$ (Cumulative Driving since last 30m break)
-- $C_{\text{cycle}} \le 70.0\text{ hrs}$ (Rolling 8-Day Cycle)
+- `C_drive ≤ 11.0 hrs` (Driving Clock)
+- `C_window ≤ 14.0 hrs` (Duty Window Clock)
+- `C_break ≤ 8.0 hrs` (Cumulative Driving since last 30m break)
+- `C_cycle ≤ 70.0 hrs` (Rolling 8-Day Cycle)
 
-If any driving segment would breach $\min(11 - C_{\text{drive}}, 14 - C_{\text{window}}, 8 - C_{\text{break}})$, the engine fragments the driving segment and inserts the mandatory safety stoppage (**30-minute rest** or **10-hour sleeper berth**) at the exact highway coordinate.
+If any driving segment would breach `min(11 - C_drive, 14 - C_window, 8 - C_break)`, the engine fragments the driving segment and inserts the mandatory safety stoppage (**30-minute rest** or **10-hour sleeper berth**) at the exact highway coordinate.
 
 ### 2. Strict 24-Hour Midnight Boundary Slicing
 
-FMCSA Form MCS-59 requires logs to cover exactly $00:00 \text{ to } 24:00$ (Midnight to Midnight). Real-world trips cross multiple midnight boundaries.
+FMCSA Form MCS-59 requires logs to cover exactly `00:00` to `24:00` (Midnight to Midnight). Real-world trips cross multiple midnight boundaries.
 
 The ELD Log Service ([`eld_log_service.py`](./backend/api/services/eld_log_service.py)):
 
-1. Slices multi-day event streams across calendar day boundaries:
-   $$\text{Day } d = [24.0 \times (d-1), 24.0 \times d)$$
+1. Slices multi-day event streams across calendar day boundaries:  
+   `Day d = [24.0 * (d - 1), 24.0 * d)`
 2. Pads pre-trip and post-trip hours with `Off Duty` time.
 3. Arithmetically balances each sheet:
-   $$\text{Hours}_{\text{OffDuty}} + \text{Hours}_{\text{Sleeper}} + \text{Hours}_{\text{Driving}} + \text{Hours}_{\text{OnDuty}} \equiv \mathbf{24.00\text{ \textbf{Hours}}}$$
+   ```text
+   Off Duty (Line 1) + Sleeper Berth (Line 2) + Driving (Line 3) + On Duty (Line 4) == 24.00 Hours
+   ```
 4. Computes the official **70-Hour / 8-Day Driver Recap**:
-   - **Line A**: Total hours on duty today ($\text{Driving} + \text{OnDuty}$)
-   - **Line B**: 70 Hours limit
+   - **Line A**: Total hours on duty today (`Driving + On Duty`)
+   - **Line B**: 70 Hours limit (`70.0 hrs`)
    - **Line C**: Total hours on duty last 7 days including today
-   - **Line D**: Eligible 70 hours available tomorrow ($70.0 - \text{Line C}$)
+   - **Line D**: Eligible 70 hours available tomorrow (`70.0 - Line C`)
 
 ---
 
@@ -206,10 +208,10 @@ The top navigation bar includes **1-Click Pre-configured Scenarios** designed fo
 
 | Scenario | Distance | Days | Stops & Layover Breakdown | Key Verification Point |
 | :--- | :---: | :---: | :--- | :--- |
-| **1. Richmond, VA ➔ Newark, NJ** | ~340 mi | **1 Day** | Shipper (1h) $\rightarrow$ Drive (6h) $\rightarrow$ Consignee (1h) | Matches official DOT handbook single-day log benchmark. No breaks required. |
+| **1. Richmond, VA ➔ Newark, NJ** | ~340 mi | **1 Day** | Shipper (1h) → Drive (6h) → Consignee (1h) | Matches official DOT handbook single-day log benchmark. No breaks required. |
 | **2. Chicago, IL ➔ Dallas, TX** | ~1,080 mi | **2 Days** | 1 Fuel Stop + 1 Rest Break + 1 Sleeper Layover (10h) | Demonstrates fuel stop insertion and shift clock reset across 2 daily log sheets. |
 | **3. Los Angeles, CA ➔ Miami, FL** | ~2,733 mi | **5 Days** | 2 Fuel Stops + 3 Sleeper Layovers (10h each) + Rest Breaks | Validates multi-day pagination, Day 1–5 tabs, and cumulative recap computation. |
-| **4. Atlanta, GA ➔ Seattle, WA (Fatigued)** | ~2,620 mi | **6 Days** | Initial Cycle = $62.0\text{ hrs}$ $\rightarrow$ **34h Restart Layover** | Demonstrates automatic **34-hour restart** when the 70-hour cycle is exhausted. |
+| **4. Atlanta, GA ➔ Seattle, WA (Fatigued)** | ~2,620 mi | **6 Days** | Initial Cycle = `62.0 hrs` → **34h Restart Layover** | Demonstrates automatic **34-hour restart** when the 70-hour cycle is exhausted. |
 
 ---
 
@@ -228,8 +230,8 @@ npx newman run Truck_Route_API.postman_collection.json
 
 - ✅ **HTTP 200 OK** on valid route requests.
 - ✅ **Schema Validation**: Ensures `summary`, `route_geometry`, `stops`, and `daily_logs` are present.
-- ✅ **24.0h Daily Total Assertion**: Verifies that $\sum \text{duty\_totals} == 24.00$ on every daily log sheet.
-- ✅ **HOS Clock Integrity**: Verifies driving hours per shift $\le 11.0$ and on-duty window $\le 14.0$.
+- ✅ **24.0h Daily Total Assertion**: Verifies that `sum(duty_totals) == 24.00 hrs` on every daily log sheet.
+- ✅ **HOS Clock Integrity**: Verifies driving hours per shift `≤ 11.0 hrs` and on-duty window `≤ 14.0 hrs`.
 - ✅ **Validation Error Handling**: Verifies HTTP 400 with descriptive error messages when required fields are missing.
 
 ---
@@ -298,7 +300,7 @@ python manage.py test
 python manage.py runserver 127.0.0.1:8000
 ```
 
-Backend API will be live at: **`http://127.0.0.1:8000/api/`**
+Backend API will be live at: [`https://truck-route-full-stack-app.onrender.com`](https://truck-route-full-stack-app.onrender.com/) or  **`http://127.0.0.1:8000/api/`**
 
 ---
 
@@ -318,7 +320,7 @@ npm run build
 npm run dev
 ```
 
-Frontend web application will be live at: **`http://localhost:5173/`**
+Frontend web application will be live at:  [`https://truck-route-azam.netlify.app`](https://truck-route-azam.netlify.app/) or  **`http://localhost:5173/`**
 
 ---
 
@@ -430,13 +432,3 @@ Calculates optimal highway routing, simulates HOS duty cycles, and generates For
 4. **Clean Code & Separation of Concerns**:
    - Zero business logic inside React components.
    - Pure, deterministic, side-effect-free Python simulation engines with 100% test coverage.
-
----
-
-## 👨‍💻 Candidate Evaluation Summary
-
-- **Role**: Full-Stack Engineer (React + Django — AI Systems)
-- **Applicant Focus**: Algorithmic correctness, clean modular architecture, FMCSA domain mastery, and polished UI/UX aesthetics.
-- **Commitment**: Ready to own features end-to-end at Spotter AI—from data modeling and high-throughput APIs to fluid, user-centric frontend experiences.
-
----
